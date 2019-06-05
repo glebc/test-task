@@ -16,8 +16,7 @@ let router = new VueRouter({
 		{
 			path: '/list',
 			name: 'list',
-			component: list,
-			props: (route) => ({ query: route.query.q })
+			component: list
 		},
 		{
 			path: '/list/:id(\\d+)',
