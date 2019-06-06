@@ -1,29 +1,46 @@
 <template>
-	<div id="list">
-		<div
+	<v-card v-if="list.length">
+		<v-list
 			v-for="item in list"
 			:key="item.show.id"
 		>
-			<router-link :to="{ name: 'item', params: { id: item.show.id } }">
-				{{ item.show.name }}
-			</router-link>
-		</div>
-
-	</div>
+			<v-container d-flex row>
+				<router-link :to="{ name: 'item', params: { id: item.show.id } }">
+					<v-card width="220px">
+						{{ item.show.name }}
+						<v-img
+							:src="item.show.image && item.show.image.original || staticImgUrl"
+							contain
+						></v-img>
+					</v-card>
+				</router-link>
+				<v-card-text>
+					<div
+						class="text-xs-left"
+						v-html="item.show.summary"
+					></div>
+				</v-card-text>
+			</v-container>
+		</v-list>
+	</v-card>
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
-	name: 'list',
 	data () {
 		return {
 			list: []
 		};
 	},
+	computed: {
+		staticImgUrl () {
+			return 'https://static.tvmaze.com/images/no-img/no-img-portrait-text.png';
+		}
+	},
 	watch: {
-		'$route': {
+		$route: {
 			handler () {
 				this.getList();
 			},
@@ -36,12 +53,8 @@ export default {
 				params: {
 					q: this.$route.query.search || ''
 				}
-			})
-					.then(({ data }) => this.list = data);
+			}).then(({ data }) => this.list = data);
 		}
 	}
 }
 </script>
-
-<style scoped lang="scss">
-</style>
